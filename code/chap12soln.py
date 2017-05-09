@@ -36,26 +36,29 @@ def PlotQuadraticModel(daily, name):
     model, results = RunQuadraticModel(daily)
     regression.SummarizeResults(results)
     timeseries.PlotFittedValues(model, results, label=name)
-    thinkplot.Save(root='timeseries11',
-                   title='fitted values',
-                   xlabel='years',
-                   xlim=[-0.1, 3.8],
-                   ylabel='price per gram ($)')
+    thinkplot.Save(
+        root='timeseries11',
+        title='fitted values',
+        xlabel='years',
+        xlim=[-0.1, 3.8],
+        ylabel='price per gram ($)')
 
     timeseries.PlotResidualPercentiles(model, results)
-    thinkplot.Save(root='timeseries12',
-                   title='residuals',
-                   xlabel='years',
-                   ylabel='price per gram ($)')
+    thinkplot.Save(
+        root='timeseries12',
+        title='residuals',
+        xlabel='years',
+        ylabel='price per gram ($)')
 
     years = np.linspace(0, 5, 101)
     thinkplot.Scatter(daily.years, daily.ppg, alpha=0.1, label=name)
     timeseries.PlotPredictions(daily, years, func=RunQuadraticModel)
-    thinkplot.Save(root='timeseries13',
-                   title='predictions',
-                   xlabel='years',
-                   xlim=[years[0]-0.1, years[-1]+0.1],
-                   ylabel='price per gram ($)')
+    thinkplot.Save(
+        root='timeseries13',
+        title='predictions',
+        xlabel='years',
+        xlim=[years[0] - 0.1, years[-1] + 0.1],
+        ylabel='price per gram ($)')
 
 
 def PlotEwmaPredictions(daily, name):
@@ -73,7 +76,7 @@ def PlotEwmaPredictions(daily, name):
     slope = filled.slope[-1]
 
     # reindex the DataFrame, adding a year to the end
-    dates = pandas.date_range(filled.index.min(), 
+    dates = pandas.date_range(filled.index.min(),
                               filled.index.max() + np.timedelta64(365, 'D'))
     predicted = filled.reindex(dates)
 
@@ -111,7 +114,7 @@ class SerialCorrelationTest(thinkstats2.HypothesisTest):
         permutation = series.reindex(np.random.permutation(series.index))
         return permutation, lag
 
-    
+
 def TestSerialCorr(daily):
     """Tests serial correlations in daily prices and their residuals.
 

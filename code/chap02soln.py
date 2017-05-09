@@ -60,7 +60,7 @@ def WeightDifference(live, firsts, others):
     print('Difference in lbs', mean1 - mean2)
     print('Difference in oz', (mean1 - mean2) * 16)
 
-    print('Difference relative to mean (%age points)', 
+    print('Difference relative to mean (%age points)',
           (mean1 - mean2) / mean0 * 100)
 
     d = thinkstats2.CohenEffectSize(firsts.totalwgt_lb, others.totalwgt_lb)
@@ -81,11 +81,11 @@ def main(script):
     # test Mode    
     mode = Mode(hist)
     print('Mode of preg length', mode)
-    assert(mode == 39)
+    assert (mode == 39)
 
     # test AllModes
     modes = AllModes(hist)
-    assert(modes[0][1] == 4693)
+    assert (modes[0][1] == 4693)
 
     for value, freq in modes[:5]:
         print(value, freq)

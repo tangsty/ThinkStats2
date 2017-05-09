@@ -28,8 +28,7 @@ def Summarize(data):
     print('std', std)
     print('median', median)
     print('skewness', thinkstats2.Skewness(data))
-    print('pearson skewness', 
-          thinkstats2.PearsonMedianSkewness(data))
+    print('pearson skewness', thinkstats2.PearsonMedianSkewness(data))
 
     return mean, median
 
@@ -37,6 +36,7 @@ def Summarize(data):
 def ComputeSkewnesses():
     """Plots KDE of birthweight and adult weight.
     """
+
     def VertLine(x, y):
         thinkplot.Plot([x, x], [0, y], color='0.6', linewidth=1)
 
@@ -47,15 +47,13 @@ def ComputeSkewnesses():
 
     y = 0.35
     VertLine(mean, y)
-    thinkplot.Text(mean-0.15, 0.1*y, 'mean', horizontalalignment='right')
+    thinkplot.Text(mean - 0.15, 0.1 * y, 'mean', horizontalalignment='right')
     VertLine(median, y)
-    thinkplot.Text(median+0.1, 0.1*y, 'median', horizontalalignment='left')
+    thinkplot.Text(median + 0.1, 0.1 * y, 'median', horizontalalignment='left')
 
     pdf = thinkstats2.EstimatedPdf(data)
     thinkplot.Pdf(pdf, label='birth weight')
-    thinkplot.Save(root='density_totalwgt_kde',
-                   xlabel='lbs',
-                   ylabel='PDF')
+    thinkplot.Save(root='density_totalwgt_kde', xlabel='lbs', ylabel='PDF')
 
     df = brfss.ReadBrfss(nrows=None)
     data = df.wtkg2.dropna()
@@ -64,16 +62,15 @@ def ComputeSkewnesses():
 
     y = 0.02499
     VertLine(mean, y)
-    thinkplot.Text(mean+1, 0.1*y, 'mean', horizontalalignment='left')
+    thinkplot.Text(mean + 1, 0.1 * y, 'mean', horizontalalignment='left')
     VertLine(median, y)
-    thinkplot.Text(median-1.5, 0.1*y, 'median', horizontalalignment='right')
+    thinkplot.Text(
+        median - 1.5, 0.1 * y, 'median', horizontalalignment='right')
 
     pdf = thinkstats2.EstimatedPdf(data)
     thinkplot.Pdf(pdf, label='adult weight')
-    thinkplot.Save(root='density_wtkg2_kde',
-                   xlabel='kg',
-                   ylabel='PDF',
-                   xlim=[0, 200])
+    thinkplot.Save(
+        root='density_wtkg2_kde', xlabel='kg', ylabel='PDF', xlim=[0, 200])
 
 
 def MakePdfExample(n=500):
@@ -98,9 +95,7 @@ def MakePdfExample(n=500):
     sample_pdf = thinkstats2.EstimatedPdf(sample)
     thinkplot.Pdf(sample_pdf, label='sample KDE')
 
-    thinkplot.Save(root='pdf_example',
-                   xlabel='Height (cm)',
-                   ylabel='Density')
+    thinkplot.Save(root='pdf_example', xlabel='Height (cm)', ylabel='Density')
 
 
 def main():

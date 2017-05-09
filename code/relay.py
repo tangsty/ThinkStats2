@@ -11,8 +11,6 @@ import numpy as np
 
 import thinkplot
 import thinkstats2
-
-
 """
 Sample line.
 
@@ -21,11 +19,12 @@ Place Div/Tot  Div   Guntime Nettime  Pace  Name                   Ag S Race# Ci
    97  26/256  M4049   42:48   42:44   6:53 Allen Downey           42 M   337 Needham MA 
 """
 
+
 def ConvertPaceToSpeed(pace):
     """Converts pace in MM:SS per mile to MPH."""
     m, s = [int(x) for x in pace.split(':')]
-    secs = m*60 + s
-    mph  = 1 / secs * 60 * 60 
+    secs = m * 60 + s
+    mph = 1 / secs * 60 * 60
     return mph
 
 
@@ -34,7 +33,7 @@ def CleanLine(line):
     t = line.split()
     if len(t) < 6:
         return None
-    
+
     place, divtot, div, gun, net, pace = t[0:6]
 
     if not '/' in divtot:
@@ -91,9 +90,10 @@ def main():
     pmf = thinkstats2.Pmf(speeds, 'speeds')
 
     thinkplot.Pmf(pmf)
-    thinkplot.Show(title='PMF of running speed',
-                   xlabel='speed (mph)',
-                   ylabel='probability')
+    thinkplot.Show(
+        title='PMF of running speed',
+        xlabel='speed (mph)',
+        ylabel='probability')
 
 
 if __name__ == '__main__':

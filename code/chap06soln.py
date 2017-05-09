@@ -13,7 +13,6 @@ import density
 import hinc
 import thinkplot
 import thinkstats2
-
 """This file contains a solution to an exercise in Think Stats:
 
 The distribution of income is famously skewed to the right.  In this
@@ -59,6 +58,7 @@ between two random people).
 
 """
 
+
 def InterpolateSample(df, log_upper=6.0):
     """Makes a sample of log10 household income.
 
@@ -98,8 +98,7 @@ def main():
 
     log_cdf = thinkstats2.Cdf(log_sample)
     thinkplot.Cdf(log_cdf)
-    thinkplot.Show(xlabel='household income',
-                   ylabel='CDF')
+    thinkplot.Show(xlabel='household income', ylabel='CDF')
 
     sample = np.power(10, log_sample)
     mean, median = density.Summarize(sample)
@@ -109,8 +108,7 @@ def main():
 
     pdf = thinkstats2.EstimatedPdf(sample)
     thinkplot.Pdf(pdf)
-    thinkplot.Show(xlabel='household income',
-                   ylabel='PDF')
+    thinkplot.Show(xlabel='household income', ylabel='PDF')
 
 
 if __name__ == "__main__":

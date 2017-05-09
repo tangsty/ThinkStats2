@@ -39,22 +39,24 @@ class _Brewer(object):
     """
     color_iter = None
 
-    colors = ['#f7fbff', '#deebf7', '#c6dbef',
-              '#9ecae1', '#6baed6', '#4292c6',
-              '#2171b5','#08519c','#08306b'][::-1]
+    colors = [
+        '#f7fbff', '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6',
+        '#2171b5', '#08519c', '#08306b'
+    ][::-1]
 
     # lists that indicate which colors to use depending on how many are used
-    which_colors = [[],
-                    [1],
-                    [1, 3],
-                    [0, 2, 4],
-                    [0, 2, 4, 6],
-                    [0, 2, 3, 5, 6],
-                    [0, 2, 3, 4, 5, 6],
-                    [0, 1, 2, 3, 4, 5, 6],
-                    [0, 1, 2, 3, 4, 5, 6, 7],
-                    [0, 1, 2, 3, 4, 5, 6, 7, 8],
-                    ]
+    which_colors = [
+        [],
+        [1],
+        [1, 3],
+        [0, 2, 4],
+        [0, 2, 4, 6],
+        [0, 2, 3, 5, 6],
+        [0, 2, 3, 4, 5, 6],
+        [0, 1, 2, 3, 4, 5, 6],
+        [0, 1, 2, 3, 4, 5, 6, 7],
+        [0, 1, 2, 3, 4, 5, 6, 7, 8],
+    ]
 
     current_figure = None
 
@@ -79,7 +81,7 @@ class _Brewer(object):
         """Initializes the color iterator with the given number of colors."""
         cls.color_iter = cls.ColorGenerator(num)
         fig = plt.gcf()
-        cls.current_figure = fig  
+        cls.current_figure = fig
 
     @classmethod
     def ClearIter(cls):
@@ -93,7 +95,7 @@ class _Brewer(object):
         fig = plt.gcf()
         if fig != cls.current_figure:
             cls.InitIter(num)
-            cls.current_figure = fig  
+            cls.current_figure = fig
 
         if cls.color_iter is None:
             cls.InitIter(num)
@@ -142,16 +144,17 @@ def PrePlot(num=None, rows=None, cols=None):
         rows = 1
 
     # resize the image, depending on the number of rows and cols
-    size_map = {(1, 1): (8, 6),
-                (1, 2): (12, 6),
-                (1, 3): (12, 6),
-                (1, 4): (12, 5),
-                (1, 5): (12, 4),
-                (2, 2): (10, 10),
-                (2, 3): (16, 10),
-                (3, 1): (8, 10),
-                (4, 1): (8, 12),
-                }
+    size_map = {
+        (1, 1): (8, 6),
+        (1, 2): (12, 6),
+        (1, 3): (12, 6),
+        (1, 4): (12, 5),
+        (1, 5): (12, 4),
+        (2, 2): (10, 10),
+        (2, 3): (16, 10),
+        (3, 1): (8, 10),
+        (4, 1): (8, 12),
+    }
 
     if (rows, cols) in size_map:
         fig = plt.gcf()
@@ -167,6 +170,7 @@ def PrePlot(num=None, rows=None, cols=None):
         ax = plt.gca()
 
     return ax
+
 
 def SubPlot(plot_number, rows=None, cols=None, **options):
     """Configures the number of subplots and changes the current plot.
@@ -304,8 +308,8 @@ def Scatter(xs, ys=None, **options):
     ys: y values
     options: options passed to plt.scatter
     """
-    options = _Underride(options, color='blue', alpha=0.2, 
-                         s=30, edgecolors='none')
+    options = _Underride(
+        options, color='blue', alpha=0.2, s=30, edgecolors='none')
 
     if ys is None and isinstance(xs, pandas.Series):
         ys = xs.values
@@ -375,16 +379,15 @@ def Hist(hist, **options):
         # if not, replace values with numbers
         labels = [str(x) for x in xs]
         xs = np.arange(len(xs))
-        plt.xticks(xs+0.5, labels)
+        plt.xticks(xs + 0.5, labels)
 
     if 'width' not in options:
         try:
             options['width'] = 0.9 * np.diff(xs).min()
         except TypeError:
             warnings.warn("Hist: Can't compute bar width automatically."
-                            "Check for non-numeric types in Hist."
-                            "Or try providing width option."
-                            )
+                          "Check for non-numeric types in Hist."
+                          "Or try providing width option.")
 
     options = _Underride(options, label=hist.label)
     options = _Underride(options, align='center')
@@ -440,7 +443,7 @@ def Pmf(pmf, **options):
 
         points.append((x, lasty))
         points.append((x, y))
-        points.append((x+width, y))
+        points.append((x + width, y))
 
         lastx = x + width
         lasty = y
@@ -449,7 +452,7 @@ def Pmf(pmf, **options):
 
     align = options.pop('align', 'center')
     if align == 'center':
-        pxs = np.array(pxs) - width/2.0
+        pxs = np.array(pxs) - width / 2.0
     if align == 'right':
         pxs = np.array(pxs) - width
 
@@ -480,7 +483,7 @@ def Diff(t):
     Returns:
         sequence of differences (length one less than t)
     """
-    diffs = [t[i+1] - t[i] for i in range(len(t)-1)]
+    diffs = [t[i + 1] - t[i] for i in range(len(t) - 1)]
     return diffs
 
 
@@ -503,7 +506,7 @@ def Cdf(cdf, complement=False, transform=None, **options):
 
     scale = dict(xscale='linear', yscale='linear')
 
-    for s in ['xscale', 'yscale']: 
+    for s in ['xscale', 'yscale']:
         if s in options:
             scale[s] = options.pop(s)
 
@@ -517,12 +520,12 @@ def Cdf(cdf, complement=False, transform=None, **options):
         scale['xscale'] = 'log'
 
     if complement:
-        ps = [1.0-p for p in ps]
+        ps = [1.0 - p for p in ps]
 
     if transform == 'weibull':
         xs = np.delete(xs, -1)
         ps = np.delete(ps, -1)
-        ps = [-math.log(1.0-p) for p in ps]
+        ps = [-math.log(1.0 - p) for p in ps]
         scale['xscale'] = 'log'
         scale['yscale'] = 'log'
 
@@ -586,7 +589,7 @@ def Contour(obj, pcolor=False, contour=True, imshow=False, **options):
     if imshow:
         extent = xs[0], xs[-1], ys[0], ys[-1]
         plt.imshow(Z, extent=extent, **options)
-        
+
 
 def Pcolor(xs, ys, zs, pcolor=True, contour=False, **options):
     """Makes a pseudocolor plot.
@@ -613,7 +616,7 @@ def Pcolor(xs, ys, zs, pcolor=True, contour=False, **options):
     if contour:
         cs = plt.contour(X, Y, Z, **options)
         plt.clabel(cs, inline=1, fontsize=10)
-        
+
 
 def Text(x, y, s, **options):
     """Puts text in a figure.
@@ -623,15 +626,17 @@ def Text(x, y, s, **options):
     s: string
     options: keyword args passed to plt.text
     """
-    options = _Underride(options,
-                         fontsize=16,
-                         verticalalignment='top',
-                         horizontalalignment='left')
+    options = _Underride(
+        options,
+        fontsize=16,
+        verticalalignment='top',
+        horizontalalignment='left')
     plt.text(x, y, s, **options)
 
 
 LEGEND = True
 LOC = None
+
 
 def Config(**options):
     """Configures the plot.
@@ -639,8 +644,10 @@ def Config(**options):
     Pulls options out of the option dictionary and passes them to
     the corresponding plt functions.
     """
-    names = ['title', 'xlabel', 'ylabel', 'xscale', 'yscale',
-             'xticks', 'yticks', 'axis', 'xlim', 'ylim']
+    names = [
+        'title', 'xlabel', 'ylabel', 'xscale', 'yscale', 'xticks', 'yticks',
+        'axis', 'xlim', 'ylim'
+    ]
 
     for name in names:
         if name in options:

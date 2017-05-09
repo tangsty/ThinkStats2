@@ -83,14 +83,14 @@ class SurvivalFunction(object):
 
         returns: Pmf
         """
-        cdf = thinkstats2.Cdf(self.ts, 1-self.ss)
+        cdf = thinkstats2.Cdf(self.ts, 1 - self.ss)
         pmf = thinkstats2.Pmf()
         for val, prob in cdf.Items():
             pmf.Set(val, prob)
 
         cutoff = cdf.ps[-1]
         if filler is not None:
-            pmf[filler] = 1-cutoff
+            pmf[filler] = 1 - cutoff
 
         return pmf
 
@@ -204,7 +204,7 @@ def ConditionalSurvival(pmf, t0):
     cond = thinkstats2.Pmf()
     for t, p in pmf.Items():
         if t >= t0:
-            cond.Set(t-t0, p)
+            cond.Set(t - t0, p)
     cond.Normalize()
     return MakeSurvivalFromCdf(cond.MakeCdf())
 
@@ -215,7 +215,7 @@ def PlotConditionalSurvival(durations):
     durations: list of durations
     """
     pmf = thinkstats2.Pmf(durations)
-    
+
     times = [8, 16, 24, 32]
     thinkplot.PrePlot(len(times))
 
@@ -375,7 +375,7 @@ def PlotPredictionsByDecade(groups, **options):
     thinkplot.PrePlot(len(hfs))
     for i, hf in enumerate(hfs):
         if i > 0:
-            hf.Extend(hfs[i-1])
+            hf.Extend(hfs[i - 1])
         sf = hf.MakeSurvival()
         thinkplot.Plot(sf, **options)
 
@@ -385,12 +385,12 @@ def ResampleSurvival(resp, iters=101):
 
     resp: DataFrame of respondents
     iters: number of resamples
-    """ 
+    """
     _, sf = EstimateMarriageSurvival(resp)
     thinkplot.Plot(sf)
 
     low, high = resp.agemarry.min(), resp.agemarry.max()
-    ts = np.arange(low, high, 1/12.0)
+    ts = np.arange(low, high, 1 / 12.0)
 
     ss_seq = []
     for _ in range(iters):
@@ -400,12 +400,13 @@ def ResampleSurvival(resp, iters=101):
 
     low, high = thinkstats2.PercentileRows(ss_seq, [5, 95])
     thinkplot.FillBetween(ts, low, high, color='gray', label='90% CI')
-    thinkplot.Save(root='survival3',
-                   xlabel='age (years)',
-                   ylabel='prob unmarried',
-                   xlim=[12, 46],
-                   ylim=[0, 1],
-                   formats=FORMATS)
+    thinkplot.Save(
+        root='survival3',
+        xlabel='age (years)',
+        ylabel='prob unmarried',
+        xlim=[12, 46],
+        ylim=[0, 1],
+        formats=FORMATS)
 
 
 def EstimateMarriageSurvival(resp):
@@ -438,12 +439,13 @@ def PlotMarriageData(resp):
 
     thinkplot.SubPlot(2)
     thinkplot.Plot(sf)
-    thinkplot.Save(root='survival2',
-                   xlabel='age (years)',
-                   ylabel='prob unmarried',
-                   ylim=[0, 1],
-                   legend=False,
-                   formats=FORMATS)
+    thinkplot.Save(
+        root='survival2',
+        xlabel='age (years)',
+        ylabel='prob unmarried',
+        ylim=[0, 1],
+        legend=False,
+        formats=FORMATS)
     return sf
 
 
@@ -470,9 +472,7 @@ def PlotPregnancyData(preg):
     print('Number of ongoing pregnancies', len(ongoing))
 
     PlotSurvival(complete)
-    thinkplot.Save(root='survival1',
-                   xlabel='t (weeks)',
-                   formats=FORMATS)
+    thinkplot.Save(root='survival1', xlabel='t (weeks)', formats=FORMATS)
 
     hf = EstimateHazardFunction(complete, ongoing)
     sf = hf.MakeSurvival()
@@ -488,23 +488,23 @@ def PlotRemainingLifetime(sf1, sf2):
     thinkplot.PrePlot(cols=2)
     rem_life1 = sf1.RemainingLifetime()
     thinkplot.Plot(rem_life1)
-    thinkplot.Config(title='remaining pregnancy length',
-                     xlabel='weeks',
-                     ylabel='mean remaining weeks')
+    thinkplot.Config(
+        title='remaining pregnancy length',
+        xlabel='weeks',
+        ylabel='mean remaining weeks')
 
     thinkplot.SubPlot(2)
     func = lambda pmf: pmf.Percentile(50)
     rem_life2 = sf2.RemainingLifetime(filler=np.inf, func=func)
     thinkplot.Plot(rem_life2)
-    thinkplot.Config(title='years until first marriage',
-                     ylim=[0, 15],
-                     xlim=[11, 31],
-                     xlabel='age (years)',
-                     ylabel='median remaining years')
+    thinkplot.Config(
+        title='years until first marriage',
+        ylim=[0, 15],
+        xlim=[11, 31],
+        xlabel='age (years)',
+        ylabel='median remaining years')
 
-    thinkplot.Save(root='survival6',
-                   formats=FORMATS)
-
+    thinkplot.Save(root='survival6', formats=FORMATS)
 
 
 def PlotResampledByDecade(resps, iters=11, predict_flag=False, omit=None):
@@ -515,13 +515,12 @@ def PlotResampledByDecade(resps, iters=11, predict_flag=False, omit=None):
     predict_flag: whether to also plot predictions
     """
     for i in range(iters):
-        samples = [thinkstats2.ResampleRowsWeighted(resp) 
-                   for resp in resps]
+        samples = [thinkstats2.ResampleRowsWeighted(resp) for resp in resps]
         sample = pd.concat(samples, ignore_index=True)
         groups = sample.groupby('decade')
 
         if omit:
-            groups = [(name, group) for name, group in groups 
+            groups = [(name, group) for name, group in groups
                       if name not in omit]
 
         # TODO: refactor this to collect resampled estimates and
@@ -536,9 +535,9 @@ def PlotResampledByDecade(resps, iters=11, predict_flag=False, omit=None):
             EstimateMarriageSurvivalByDecade(groups, alpha=0.2)
 
 
-
 # NOTE: The functions below are copied from marriage.py in
 # the MarriageNSFG repo.
+
 
 def ReadFemResp1995():
     """Reads respondent data from NSFG Cycle 5.
@@ -547,15 +546,10 @@ def ReadFemResp1995():
     """
     dat_file = '1995FemRespData.dat.gz'
     names = ['cmintvw', 'timesmar', 'cmmarrhx', 'cmbirth', 'finalwgt']
-    colspecs = [(12360-1, 12363),
-                (4637-1, 4638),
-                (11759-1, 11762),
-                (14-1, 16),
-                (12350-1, 12359)]
-    df = pd.read_fwf(dat_file, 
-                         compression='gzip', 
-                         colspecs=colspecs, 
-                         names=names)
+    colspecs = [(12360 - 1, 12363), (4637 - 1, 4638), (11759 - 1, 11762),
+                (14 - 1, 16), (12350 - 1, 12359)]
+    df = pd.read_fwf(
+        dat_file, compression='gzip', colspecs=colspecs, names=names)
 
     df.timesmar.replace([98, 99], np.nan, inplace=True)
     df['evrmarry'] = (df.timesmar > 0)
@@ -569,8 +563,10 @@ def ReadFemResp2002():
 
     returns: DataFrame
     """
-    usecols = ['caseid', 'cmmarrhx', 'cmdivorcx', 'cmbirth', 'cmintvw', 
-               'evrmarry', 'parity', 'finalwgt']
+    usecols = [
+        'caseid', 'cmmarrhx', 'cmdivorcx', 'cmbirth', 'cmintvw', 'evrmarry',
+        'parity', 'finalwgt'
+    ]
     df = ReadFemResp(usecols=usecols)
     df['evrmarry'] = (df.evrmarry == 1)
     CleanFemResp(df)
@@ -582,11 +578,14 @@ def ReadFemResp2010():
 
     returns: DataFrame
     """
-    usecols = ['caseid', 'cmmarrhx', 'cmdivorcx', 'cmbirth', 'cmintvw',
-               'evrmarry', 'parity', 'wgtq1q16']
-    df = ReadFemResp('2006_2010_FemRespSetup.dct',
-                       '2006_2010_FemResp.dat.gz',
-                        usecols=usecols)
+    usecols = [
+        'caseid', 'cmmarrhx', 'cmdivorcx', 'cmbirth', 'cmintvw', 'evrmarry',
+        'parity', 'wgtq1q16'
+    ]
+    df = ReadFemResp(
+        '2006_2010_FemRespSetup.dct',
+        '2006_2010_FemResp.dat.gz',
+        usecols=usecols)
     df['evrmarry'] = (df.evrmarry == 1)
     df['finalwgt'] = df.wgtq1q16
     CleanFemResp(df)
@@ -598,11 +597,14 @@ def ReadFemResp2013():
 
     returns: DataFrame
     """
-    usecols = ['caseid', 'cmmarrhx', 'cmdivorcx', 'cmbirth', 'cmintvw',
-               'evrmarry', 'parity', 'wgt2011_2013']
-    df = ReadFemResp('2011_2013_FemRespSetup.dct',
-                        '2011_2013_FemRespData.dat.gz',
-                        usecols=usecols)
+    usecols = [
+        'caseid', 'cmmarrhx', 'cmdivorcx', 'cmbirth', 'cmintvw', 'evrmarry',
+        'parity', 'wgt2011_2013'
+    ]
+    df = ReadFemResp(
+        '2011_2013_FemRespSetup.dct',
+        '2011_2013_FemRespData.dat.gz',
+        usecols=usecols)
     df['evrmarry'] = (df.evrmarry == 1)
     df['finalwgt'] = df.wgt2011_2013
     CleanFemResp(df)
@@ -637,8 +639,7 @@ def CleanFemResp(resp):
     resp['age'] = (resp.cmintvw - resp.cmbirth) / 12.0
 
     month0 = pd.to_datetime('1899-12-15')
-    dates = [month0 + pd.DateOffset(months=cm) 
-             for cm in resp.cmbirth]
+    dates = [month0 + pd.DateOffset(months=cm) for cm in resp.cmbirth]
     resp['year'] = (pd.DatetimeIndex(dates).year - 1900)
     resp['decade'] = resp.year // 10
     resp['fives'] = resp.year // 5
@@ -646,7 +647,7 @@ def CleanFemResp(resp):
 
 def main():
     thinkstats2.RandomSeed(17)
-    
+
     preg = nsfg.ReadFemPreg()
     sf1 = PlotPregnancyData(preg)
 
@@ -666,21 +667,23 @@ def main():
     # plot resampled survival functions by decade
     resps = [resp5, resp6, resp7]
     PlotResampledByDecade(resps)
-    thinkplot.Save(root='survival4',
-                   xlabel='age (years)',
-                   ylabel='prob unmarried',
-                   xlim=[13, 45],
-                   ylim=[0, 1],
-                   formats=FORMATS)
+    thinkplot.Save(
+        root='survival4',
+        xlabel='age (years)',
+        ylabel='prob unmarried',
+        xlim=[13, 45],
+        ylim=[0, 1],
+        formats=FORMATS)
 
     # plot resampled survival functions by decade, with predictions
     PlotResampledByDecade(resps, predict_flag=True, omit=[5])
-    thinkplot.Save(root='survival5',
-                   xlabel='age (years)',
-                   ylabel='prob unmarried',
-                   xlim=[13, 45],
-                   ylim=[0, 1],
-                   formats=FORMATS)
+    thinkplot.Save(
+        root='survival5',
+        xlabel='age (years)',
+        ylabel='prob unmarried',
+        xlim=[13, 45],
+        ylim=[0, 1],
+        formats=FORMATS)
 
 
 if __name__ == '__main__':

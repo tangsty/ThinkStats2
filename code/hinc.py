@@ -35,7 +35,7 @@ def ReadData(filename='hinc06.csv'):
     """
     data = pandas.read_csv(filename, header=None, skiprows=9)
     cols = data[[0, 1]]
-        
+
     res = []
     for _, row in cols.iterrows():
         label, freq = row.values
@@ -55,7 +55,7 @@ def ReadData(filename='hinc06.csv'):
     total = df[2][41]
     df[3] = df[2] / total
     # add column names
-    df.columns = ['income',  'freq', 'cumsum', 'ps']
+    df.columns = ['income', 'freq', 'cumsum', 'ps']
     return df
 
 

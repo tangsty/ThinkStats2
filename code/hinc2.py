@@ -53,8 +53,7 @@ def main():
 
     log_cdf = thinkstats2.Cdf(log_sample)
     thinkplot.Cdf(log_cdf)
-    thinkplot.Show(xlabel='household income',
-                   ylabel='CDF')
+    thinkplot.Show(xlabel='household income', ylabel='CDF')
 
 
 if __name__ == "__main__":

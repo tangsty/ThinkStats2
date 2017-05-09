@@ -23,7 +23,7 @@ def MeanError(estimates, actual):
 
     returns: float mean error
     """
-    errors = [estimate-actual for estimate in estimates]
+    errors = [estimate - actual for estimate in estimates]
     return np.mean(errors)
 
 
@@ -35,7 +35,7 @@ def RMSE(estimates, actual):
 
     returns: float RMSE
     """
-    e2 = [(estimate-actual)**2 for estimate in estimates]
+    e2 = [(estimate - actual)**2 for estimate in estimates]
     mse = np.mean(e2)
     return math.sqrt(mse)
 
@@ -97,7 +97,7 @@ def Estimate3(n=7, m=1000):
     means = []
     medians = []
     for _ in range(m):
-        xs = np.random.exponential(1.0/lam, n)
+        xs = np.random.exponential(1.0 / lam, n)
         L = 1 / np.mean(xs)
         Lm = math.log(2) / np.median(xs)
         means.append(L)
@@ -118,6 +118,7 @@ def SimulateSample(mu=90, sigma=7.5, n=9, m=1000):
     n: sample size
     m: number of iterations
     """
+
     def VertLine(x, y=1):
         thinkplot.Plot([x, x], [0, y], color='0.8', linewidth=3)
 
@@ -138,10 +139,11 @@ def SimulateSample(mu=90, sigma=7.5, n=9, m=1000):
 
     # plot the CDF
     thinkplot.Cdf(cdf)
-    thinkplot.Save(root='estimation1',
-                   xlabel='sample mean',
-                   ylabel='CDF',
-                   title='Sampling distribution')
+    thinkplot.Save(
+        root='estimation1',
+        xlabel='sample mean',
+        ylabel='CDF',
+        title='Sampling distribution')
 
 
 def main():
@@ -151,7 +153,6 @@ def main():
     Estimate2()
     Estimate3(m=1000)
     SimulateSample()
-
 
 
 if __name__ == '__main__':

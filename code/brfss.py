@@ -23,7 +23,7 @@ def Summarize(df, column, title):
         ('all', df[column]),
         ('male', df[df.sex == 1][column]),
         ('female', df[df.sex == 2][column]),
-        ]
+    ]
 
     print(title)
     print('key\tn\tmean\tvar\tstd\tcv')
@@ -52,7 +52,8 @@ def CleanBrfssFrame(df):
 
     # clean weight a year ago
     df.wtyrago.replace([7777, 9999], float('NaN'), inplace=True)
-    df['wtyrago'] = df.wtyrago.apply(lambda x: x/2.2 if x < 9000 else x-9000)
+    df['wtyrago'] = df.wtyrago.apply(
+        lambda x: x / 2.2 if x < 9000 else x - 9000)
 
 
 def ReadBrfss(filename='CDBRFS08.ASC.gz', compression='gzip', nrows=None):
@@ -71,7 +72,7 @@ def ReadBrfss(filename='CDBRFS08.ASC.gz', compression='gzip', nrows=None):
         ('finalwt', 799, 808, int),
         ('wtkg2', 1254, 1258, int),
         ('htm3', 1251, 1253, int),
-        ]
+    ]
     columns = ['name', 'start', 'end', 'type']
     variables = pandas.DataFrame(var_info, columns=columns)
     variables.end += 1
@@ -152,7 +153,7 @@ def main(script, nrows=1000):
     """
     thinkstats2.RandomSeed(17)
 
-    nrows = int(nrows)    
+    nrows = int(nrows)
     df = ReadBrfss(nrows=nrows)
     MakeFigures(df)
 
@@ -161,12 +162,12 @@ def main(script, nrows=1000):
     Summarize(df, 'wtyrago', 'Weight year ago (kg):')
 
     if nrows == 1000:
-        assert(df.age.value_counts()[40] == 28)
-        assert(df.sex.value_counts()[2] == 668)
-        assert(df.wtkg2.value_counts()[90.91] == 49)
-        assert(df.wtyrago.value_counts()[160/2.2] == 49)
-        assert(df.htm3.value_counts()[163] == 103)
-        assert(df.finalwt.value_counts()[185.870345] == 13)
+        assert (df.age.value_counts()[40] == 28)
+        assert (df.sex.value_counts()[2] == 668)
+        assert (df.wtkg2.value_counts()[90.91] == 49)
+        assert (df.wtyrago.value_counts()[160 / 2.2] == 49)
+        assert (df.htm3.value_counts()[163] == 103)
+        assert (df.finalwt.value_counts()[185.870345] == 13)
         print('%s: All tests passed.' % script)
 
 

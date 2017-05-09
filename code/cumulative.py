@@ -26,6 +26,7 @@ def PercentileRank(scores, your_score):
     percentile_rank = 100.0 * count / len(scores)
     return percentile_rank
 
+
 scores = [55, 66, 77, 88, 99]
 your_score = 88
 
@@ -34,6 +35,7 @@ for score in scores:
     print(score, PercentileRank(scores, score))
 print()
 
+
 def Percentile(scores, percentile_rank):
     """Computes the value that corresponds to a given percentile rank. """
     scores.sort()
@@ -41,20 +43,21 @@ def Percentile(scores, percentile_rank):
         if PercentileRank(scores, score) >= percentile_rank:
             return score
 
+
 def Percentile2(scores, percentile_rank):
     """Computes the value that corresponds to a given percentile rank.
 
     Slightly more efficient.
     """
     scores.sort()
-    index = percentile_rank * (len(scores)-1) // 100
+    index = percentile_rank * (len(scores) - 1) // 100
     return scores[index]
+
 
 print('prank, score, score')
 for percentile_rank in [0, 20, 25, 40, 50, 60, 75, 80, 100]:
-    print(percentile_rank, 
-          Percentile(scores, percentile_rank),
-          Percentile2(scores, percentile_rank))
+    print(percentile_rank, Percentile(scores, percentile_rank), Percentile2(
+        scores, percentile_rank))
 
 
 def EvalCdf(sample, x):
@@ -73,12 +76,12 @@ def EvalCdf(sample, x):
     prob = count / len(sample)
     return prob
 
+
 sample = [1, 2, 2, 3, 5]
 
 print('x', 'CDF(x)')
 for x in range(0, 7):
     print(x, EvalCdf(sample, x))
-
 
 
 def PositionToPercentile(position, field_size):
@@ -111,6 +114,7 @@ percentile = PositionToPercentile(26, 256)
 print('Equivalent position in M50-59', PercentileToPosition(percentile, 171))
 # 17th place = 46:05
 print('Equivalent position in F20-29', PercentileToPosition(percentile, 448))
+
 # 48:28
 
 
@@ -120,11 +124,12 @@ def MakeExample():
     cdf = thinkstats2.Cdf(t)
     thinkplot.Clf()
     thinkplot.Cdf(cdf)
-    thinkplot.Save(root='cumulative_example_cdf',
-                   xlabel='x',
-                   ylabel='CDF',
-                   axis=[0, 6, 0, 1],
-                   legend=False)    
+    thinkplot.Save(
+        root='cumulative_example_cdf',
+        xlabel='x',
+        ylabel='CDF',
+        axis=[0, 6, 0, 1],
+        legend=False)
 
 
 def MakeFigures(live, firsts, others):
@@ -139,7 +144,7 @@ def MakeFigures(live, firsts, others):
     first_wgt_dropna = first_wgt.dropna()
     print('Firsts', len(first_wgt), len(first_wgt_dropna))
     #assert len(first_wgt_dropna) == 4381
- 
+
     other_wgt = others.totalwgt_lb
     other_wgt_dropna = other_wgt.dropna()
     print('Others', len(other_wgt), len(other_wgt_dropna))
@@ -154,10 +159,11 @@ def MakeFigures(live, firsts, others):
     thinkplot.PrePlot(2)
     thinkplot.Hist(first_pmf, align='right', width=width)
     thinkplot.Hist(other_pmf, align='left', width=width)
-    thinkplot.Save(root='cumulative_birthwgt_pmf',
-                   title='Birth weight',
-                   xlabel='weight (pounds)',
-                   ylabel='PMF')
+    thinkplot.Save(
+        root='cumulative_birthwgt_pmf',
+        title='Birth weight',
+        xlabel='weight (pounds)',
+        ylabel='PMF')
 
     # plot CDFs of birth weights for first babies and others
     first_cdf = thinkstats2.Cdf(firsts.totalwgt_lb, label='first')
@@ -165,12 +171,12 @@ def MakeFigures(live, firsts, others):
 
     thinkplot.PrePlot(2)
     thinkplot.Cdfs([first_cdf, other_cdf])
-    thinkplot.Save(root='cumulative_birthwgt_cdf',
-                   title='Birth weight',
-                   xlabel='weight (pounds)',
-                   ylabel='CDF',
-                   axis=[0, 12.5, 0, 1]
-                   )
+    thinkplot.Save(
+        root='cumulative_birthwgt_cdf',
+        title='Birth weight',
+        xlabel='weight (pounds)',
+        ylabel='CDF',
+        axis=[0, 12.5, 0, 1])
 
 
 def MakeCdf(live):
@@ -180,10 +186,11 @@ def MakeCdf(live):
     """
     cdf = thinkstats2.Cdf(live.prglngth, label='prglngth')
     thinkplot.Cdf(cdf)
-    thinkplot.Save('cumulative_prglngth_cdf',
-                   title='Pregnancy length',
-                   xlabel='weeks',
-                   ylabel='CDF')
+    thinkplot.Save(
+        'cumulative_prglngth_cdf',
+        title='Pregnancy length',
+        xlabel='weeks',
+        ylabel='CDF')
 
 
 def RandomFigure(live):
@@ -195,9 +202,8 @@ def RandomFigure(live):
 
     rank_cdf = thinkstats2.Cdf(ranks, label='percentile ranks')
     thinkplot.Cdf(rank_cdf)
-    thinkplot.Save(root='cumulative_random',
-                   xlabel='percentile rank',
-                   ylabel='CDF')
+    thinkplot.Save(
+        root='cumulative_random', xlabel='percentile rank', ylabel='CDF')
 
 
 def TestSample(live):
@@ -213,9 +219,8 @@ def TestSample(live):
 
     thinkplot.PrePlot(2)
     thinkplot.Cdfs([cdf, sample_cdf])
-    thinkplot.Save(root='cumulative_sample',
-                   xlabel='weight (pounds)',
-                   ylabel='CDF')
+    thinkplot.Save(
+        root='cumulative_sample', xlabel='weight (pounds)', ylabel='CDF')
 
 
 def main(name, data_dir=''):

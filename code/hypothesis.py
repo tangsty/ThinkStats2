@@ -142,7 +142,7 @@ class DiceTest(thinkstats2.HypothesisTest):
         returns: simulated data
         """
         n = sum(self.data)
-        values = [1,2,3,4,5,6]
+        values = [1, 2, 3, 4, 5, 6]
         rolls = np.random.choice(values, n, replace=True)
         hist = thinkstats2.Hist(rolls)
         freqs = hist.Freqs(values)
@@ -267,12 +267,13 @@ def RunTests(data, iters=1000):
     PrintTest(p_value, ht)
 
     ht.PlotCdf()
-    thinkplot.Save(root='hypothesis1',
-                   title='Permutation test',
-                   xlabel='difference in means (weeks)',
-                   ylabel='CDF',
-                   legend=False) 
-    
+    thinkplot.Save(
+        root='hypothesis1',
+        title='Permutation test',
+        xlabel='difference in means (weeks)',
+        ylabel='CDF',
+        legend=False)
+
     # test the difference in means one-sided
     ht = DiffMeansOneSided(data)
     p_value = ht.PValue(iters=iters)
@@ -286,7 +287,7 @@ def RunTests(data, iters=1000):
     PrintTest(p_value, ht)
 
 
-def ReplicateTests():    
+def ReplicateTests():
     """Replicates tests with the new NSFG data."""
 
     live, firsts, others = nsfg2.MakeFrames()

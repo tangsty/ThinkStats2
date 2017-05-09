@@ -13,7 +13,6 @@ import pandas
 import hinc
 import thinkplot
 import thinkstats2
-
 """This file contains a solution to an exercise in Think Stats:
 
 The distributions of wealth and income are sometimes modeled using
@@ -67,6 +66,7 @@ so you might have to
 class SmoothCdf(thinkstats2.Cdf):
     """Represents a CDF based on calculated quantiles.
     """
+
     def Render(self):
         """Because this CDF was not computed from a sample, it
         should not be rendered as a step function.
@@ -90,25 +90,24 @@ def MakeFigures(df):
     xs, ps = df.income.values, df.ps.values
     cdf = SmoothCdf(xs, ps, label='data')
     cdf_log = SmoothCdf(np.log10(xs), ps, label='data')
-    
+
     # linear plot
-    thinkplot.Cdf(cdf) 
-    thinkplot.Save(root='hinc_linear',
-                   xlabel='household income',
-                   ylabel='CDF')
+    thinkplot.Cdf(cdf)
+    thinkplot.Save(root='hinc_linear', xlabel='household income', ylabel='CDF')
 
     # pareto plot
     # for the model I chose parameters by hand to fit the tail
-    xs, ys = thinkstats2.RenderParetoCdf(xmin=55000, alpha=2.5, 
-                                         low=0, high=250000)
-    thinkplot.Plot(xs, 1-ys, label='model', color='0.8')
+    xs, ys = thinkstats2.RenderParetoCdf(
+        xmin=55000, alpha=2.5, low=0, high=250000)
+    thinkplot.Plot(xs, 1 - ys, label='model', color='0.8')
 
-    thinkplot.Cdf(cdf, complement=True) 
-    thinkplot.Save(root='hinc_pareto',
-                   xlabel='log10 household income',
-                   ylabel='CCDF',
-                   xscale='log',
-                   yscale='log')
+    thinkplot.Cdf(cdf, complement=True)
+    thinkplot.Save(
+        root='hinc_pareto',
+        xlabel='log10 household income',
+        ylabel='CCDF',
+        xscale='log',
+        yscale='log')
 
     # lognormal plot
     # for the model I estimate mu and sigma using 
@@ -124,11 +123,10 @@ def MakeFigures(df):
     xs, ps = thinkstats2.RenderNormalCdf(median, std, low=3.5, high=5.5)
     thinkplot.Plot(xs, ps, label='model', color='0.8')
 
-    thinkplot.Cdf(cdf_log) 
-    thinkplot.Save(root='hinc_normal',
-                   xlabel='log10 household income',
-                   ylabel='CDF')
-    
+    thinkplot.Cdf(cdf_log)
+    thinkplot.Save(
+        root='hinc_normal', xlabel='log10 household income', ylabel='CDF')
+
 
 def main():
     df = hinc.ReadData()

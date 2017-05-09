@@ -24,8 +24,8 @@ def ReadData(filename='PEP_2012_PEPANNRES_with_ann.csv'):
 
     returns: pandas Series of populations in thousands
     """
-    df = pandas.read_csv(filename, header=None, skiprows=2,
-                         encoding='iso-8859-1')
+    df = pandas.read_csv(
+        filename, header=None, skiprows=2, encoding='iso-8859-1')
     populations = df[7]
     populations.replace(0, np.nan, inplace=True)
     return populations.dropna()
@@ -48,19 +48,17 @@ def MakeFigures():
     """
     pops = ReadData()
     print('Number of cities/towns', len(pops))
-    
+
     log_pops = np.log10(pops)
     cdf = thinkstats2.Cdf(pops, label='data')
     cdf_log = thinkstats2.Cdf(log_pops, label='data')
 
     # pareto plot
     xs, ys = thinkstats2.RenderParetoCdf(xmin=5000, alpha=1.4, low=0, high=1e7)
-    thinkplot.Plot(np.log10(xs), 1-ys, label='model', color='0.8')
+    thinkplot.Plot(np.log10(xs), 1 - ys, label='model', color='0.8')
 
-    thinkplot.Cdf(cdf_log, complement=True) 
-    thinkplot.Config(xlabel='log10 population',
-                     ylabel='CCDF',
-                     yscale='log')
+    thinkplot.Cdf(cdf_log, complement=True)
+    thinkplot.Config(xlabel='log10 population', ylabel='CCDF', yscale='log')
     thinkplot.Save(root='populations_pareto')
 
     # lognormal plot
@@ -70,18 +68,15 @@ def MakeFigures():
     xs, ps = thinkstats2.RenderNormalCdf(mu, sigma, low=0, high=8)
     thinkplot.Plot(xs, ps, label='model', color='0.8')
 
-    thinkplot.Cdf(cdf_log) 
-    thinkplot.Config(xlabel='log10 population',
-                     ylabel='CDF')
+    thinkplot.Cdf(cdf_log)
+    thinkplot.Config(xlabel='log10 population', ylabel='CDF')
 
     thinkplot.SubPlot(2)
     thinkstats2.NormalProbabilityPlot(log_pops, label='data')
-    thinkplot.Config(xlabel='z',
-                     ylabel='log10 population',
-                     xlim=[-5, 5])
+    thinkplot.Config(xlabel='z', ylabel='log10 population', xlim=[-5, 5])
 
     thinkplot.Save(root='populations_normal')
-    
+
 
 def main():
     thinkstats2.RandomSeed(17)

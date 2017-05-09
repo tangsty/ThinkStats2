@@ -104,7 +104,7 @@ def GoMining(df):
             formula = formula.encode('ascii')
 
             model = smf.ols(formula, data=df)
-            if model.nobs < len(df)/2:
+            if model.nobs < len(df) / 2:
                 continue
 
             results = model.fit()
@@ -143,7 +143,7 @@ def PredictBirthWeight(live):
 
     live: DataFrame of live births
     """
-    live = live[live.prglngth>30]
+    live = live[live.prglngth > 30]
     join = JoinFemResp(live)
 
     t = GoMining(join)
@@ -193,11 +193,11 @@ def RunSimpleRegression(live):
     SummarizeResults(results)
 
     def AlmostEquals(x, y, tol=1e-6):
-        return abs(x-y) < tol
+        return abs(x - y) < tol
 
-    assert(AlmostEquals(results.params['Intercept'], inter))
-    assert(AlmostEquals(results.params['agepreg'], slope))
-    assert(AlmostEquals(results.rsquared, r2))
+    assert (AlmostEquals(results.params['Intercept'], inter))
+    assert (AlmostEquals(results.params['agepreg'], slope))
+    assert (AlmostEquals(results.rsquared, r2))
 
 
 def PivotTables(live):
@@ -205,8 +205,8 @@ def PivotTables(live):
 
     live: DataFrame of live births
     """
-    table = pandas.pivot_table(live, rows='isfirst',
-                               values=['totalwgt_lb', 'agepreg'])
+    table = pandas.pivot_table(
+        live, rows='isfirst', values=['totalwgt_lb', 'agepreg'])
     print(table)
 
 
@@ -233,7 +233,7 @@ def FormatRow(results, columns):
         t.append('%.2g' % results.rsquared)
     except AttributeError:
         t.append('%.2g' % results.prsquared)
-        
+
     return t
 
 
@@ -257,20 +257,20 @@ def RunModels(live):
     rows.append(FormatRow(results, columns))
     print(formula)
     SummarizeResults(results)
-    
+
     formula = 'totalwgt_lb ~ isfirst + agepreg'
     results = smf.ols(formula, data=live).fit()
     rows.append(FormatRow(results, columns))
     print(formula)
     SummarizeResults(results)
-    
+
     live['agepreg2'] = live.agepreg**2
     formula = 'totalwgt_lb ~ isfirst + agepreg + agepreg2'
     results = smf.ols(formula, data=live).fit()
     rows.append(FormatRow(results, columns))
     print(formula)
     SummarizeResults(results)
-    
+
     PrintTabular(rows, header)
 
 
@@ -299,16 +299,16 @@ def LogisticRegressionExample():
 
     beta = [-1.5, 2.8, 1.1]
 
-    log_o = beta[0] + beta[1] * x1 + beta[2] * x2 
+    log_o = beta[0] + beta[1] * x1 + beta[2] * x2
     print(log_o)
 
     o = np.exp(log_o)
     print(o)
 
-    p = o / (o+1)
+    p = o / (o + 1)
     print(p)
 
-    like = y * p + (1-y) * (1-p)
+    like = y * p + (1 - y) * (1 - p)
     print(like)
     print(np.prod(like))
 
@@ -316,7 +316,6 @@ def LogisticRegressionExample():
     results = smf.logit('y ~ x1 + x2', data=df).fit()
     print(results.summary())
 
-    
 
 def RunLogisticModels(live):
     """Runs regressions that predict sex.
@@ -325,15 +324,15 @@ def RunLogisticModels(live):
     """
     #live = linear.ResampleRowsWeighted(live)
 
-    df = live[live.prglngth>30]
+    df = live[live.prglngth > 30]
 
-    df['boy'] = (df.babysex==1).astype(int)
-    df['isyoung'] = (df.agepreg<20).astype(int)
-    df['isold'] = (df.agepreg<35).astype(int)
-    df['season'] = (((df.datend+1) % 12) / 3).astype(int)
+    df['boy'] = (df.babysex == 1).astype(int)
+    df['isyoung'] = (df.agepreg < 20).astype(int)
+    df['isold'] = (df.agepreg < 35).astype(int)
+    df['season'] = (((df.datend + 1) % 12) / 3).astype(int)
 
     # run the simple model
-    model = smf.logit('boy ~ agepreg', data=df)    
+    model = smf.logit('boy ~ agepreg', data=df)
     results = model.fit()
     print('nobs', results.nobs)
     print(type(results))
@@ -349,11 +348,11 @@ def RunLogisticModels(live):
     # make the scatter plot
     exog = pandas.DataFrame(model.exog, columns=model.exog_names)
     endog = pandas.DataFrame(model.endog, columns=[model.endog_names])
-    
+
     xs = exog['agepreg']
     lo = results.fittedvalues
     o = np.exp(lo)
-    p = o / (o+1)
+    p = o / (o + 1)
 
     #thinkplot.Scatter(xs, p, alpha=0.1)
     #thinkplot.Show()

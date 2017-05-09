@@ -16,8 +16,8 @@ import numpy as np
 import thinkstats2
 import thinkplot
 
-class Test(unittest.TestCase):
 
+class Test(unittest.TestCase):
     def testHist(self):
         hist = thinkstats2.Hist(['red', 'green', 'blue'])
         hist['red'] += 1

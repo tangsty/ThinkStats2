@@ -43,7 +43,7 @@ def PmfVar(pmf, mu=None):
 
     var = 0.0
     for x, p in pmf.d.items():
-        var += p * (x - mu) ** 2
+        var += p * (x - mu)**2
     return var
 
 
@@ -79,8 +79,7 @@ def PairWiseDifferences(live):
 
     pmf = thinkstats2.Pmf(diffs)
     thinkplot.Hist(pmf, align='center')
-    thinkplot.Show(xlabel='Difference in weeks',
-                   ylabel='PMF')
+    thinkplot.Show(xlabel='Difference in weeks', ylabel='PMF')
 
 
 def main(script):
@@ -97,8 +96,8 @@ def main(script):
     mean = PmfMean(pmf)
     var = PmfVar(pmf)
 
-    assert(mean == pmf.Mean())
-    assert(var == pmf.Var())
+    assert (mean == pmf.Mean())
+    assert (var == pmf.Var())
     print('mean/var preg length', mean, var)
 
     print('%s: All tests passed.' % script)

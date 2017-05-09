@@ -44,10 +44,11 @@ def ScatterPlot(heights, weights, alpha=1.0):
     alpha: float
     """
     thinkplot.Scatter(heights, weights, alpha=alpha)
-    thinkplot.Config(xlabel='height (cm)',
-                     ylabel='weight (kg)',
-                     axis=[140, 210, 20, 200],
-                     legend=False)
+    thinkplot.Config(
+        xlabel='height (cm)',
+        ylabel='weight (kg)',
+        axis=[140, 210, 20, 200],
+        legend=False)
 
 
 def HexBin(heights, weights, bins=None):
@@ -58,10 +59,11 @@ def HexBin(heights, weights, bins=None):
     bins: 'log' or None for linear
     """
     thinkplot.HexBin(heights, weights, bins=bins)
-    thinkplot.Config(xlabel='height (cm)',
-                     ylabel='weight (kg)',
-                     axis=[140, 210, 20, 200],
-                     legend=False)
+    thinkplot.Config(
+        xlabel='height (cm)',
+        ylabel='weight (kg)',
+        axis=[140, 210, 20, 200],
+        legend=False)
 
 
 def MakeFigures(df):
@@ -113,9 +115,7 @@ def BinnedPercentiles(df):
         label = '%dth' % percent
         thinkplot.Plot(heights, weights, label=label)
 
-    thinkplot.Save(root='scatter3',
-                   xlabel='height (cm)',
-                   ylabel='weight (kg)')
+    thinkplot.Save(root='scatter3', xlabel='height (cm)', ylabel='weight (kg)')
 
 
 def Correlations(df):
@@ -130,20 +130,20 @@ def Correlations(df):
     print()
 
     print('pandas corr spearman', df.htm3.corr(df.wtkg2, method='spearman'))
-    print('thinkstats2 SpearmanCorr', 
-          thinkstats2.SpearmanCorr(df.htm3, df.wtkg2))
-    print('thinkstats2 SpearmanCorr log wtkg3', 
-          thinkstats2.SpearmanCorr(df.htm3, np.log(df.wtkg2)))
+    print('thinkstats2 SpearmanCorr', thinkstats2.SpearmanCorr(
+        df.htm3, df.wtkg2))
+    print('thinkstats2 SpearmanCorr log wtkg3', thinkstats2.SpearmanCorr(
+        df.htm3, np.log(df.wtkg2)))
     print()
 
-    print('thinkstats2 Corr log wtkg3',
-          thinkstats2.Corr(df.htm3, np.log(df.wtkg2)))
+    print('thinkstats2 Corr log wtkg3', thinkstats2.Corr(
+        df.htm3, np.log(df.wtkg2)))
     print()
 
 
 def main(script):
     thinkstats2.RandomSeed(17)
-    
+
     df = brfss.ReadBrfss(nrows=None)
     df = df.dropna(subset=['htm3', 'wtkg2'])
     Correlations(df)
@@ -151,7 +151,7 @@ def main(script):
 
     MakeFigures(df)
     BinnedPercentiles(df)
-    
+
 
 if __name__ == '__main__':
     main(*sys.argv)

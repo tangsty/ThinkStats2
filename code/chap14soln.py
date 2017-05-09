@@ -58,8 +58,7 @@ def PlotPregLengths(live, firsts, others):
     print(dist.Percentile(5), dist.Percentile(95))
 
     thinkplot.Plot(dist, label='estimated params')
-    thinkplot.Show(xlabel='difference in means (weeks)',
-                   ylabel='CDF')
+    thinkplot.Show(xlabel='difference in means (weeks)', ylabel='CDF')
 
 
 def GenerateAdultWeight(birth_weights, n):
@@ -94,8 +93,8 @@ def PlotAdultWeights(live):
     aws = [GenerateAdultWeight(birth_weights, 40) for _ in range(1000)]
     log_aws = np.log10(aws)
     thinkstats2.NormalProbabilityPlot(log_aws)
-    thinkplot.Show(xlabel='standard normal values',
-                   ylabel='adult weight (log10 lbs)')
+    thinkplot.Show(
+        xlabel='standard normal values', ylabel='adult weight (log10 lbs)')
 
 
 def TestIntervention():
@@ -121,12 +120,12 @@ def TestIntervention():
     female_after = normal.Normal(3.18, 0.16**2)
 
     diff_before = female_before - male_before
-    print('mean, p-value', diff_before.mu, 1-diff_before.Prob(0))
+    print('mean, p-value', diff_before.mu, 1 - diff_before.Prob(0))
     print('CI', diff_before.Percentile(5), diff_before.Percentile(95))
     print('stderr', diff_before.sigma)
 
     diff_after = female_after - male_after
-    print('mean, p-value', diff_after.mu, 1-diff_after.Prob(0))
+    print('mean, p-value', diff_after.mu, 1 - diff_after.Prob(0))
     print('CI', diff_after.Percentile(5), diff_after.Percentile(95))
     print('stderr', diff_after.sigma)
 

@@ -48,8 +48,12 @@ def SamplingDistributions(live, iters=101):
     return inters, slopes
 
 
-def PlotConfidenceIntervals(xs, inters, slopes, 
-                            res=None, percent=90, **options):
+def PlotConfidenceIntervals(xs,
+                            inters,
+                            slopes,
+                            res=None,
+                            percent=90,
+                            **options):
     """Plots the 90% confidence intervals for weights based on ages.
 
     xs: sequence
@@ -90,29 +94,31 @@ def PlotSamplingDistributions(live):
 
     # plot the confidence intervals
     inters, slopes = SamplingDistributions(live, iters=1001)
-    PlotConfidenceIntervals(ages, inters, slopes, percent=90, 
-                            alpha=0.3, label='90% CI')
+    PlotConfidenceIntervals(
+        ages, inters, slopes, percent=90, alpha=0.3, label='90% CI')
     thinkplot.Text(42, 7.53, '90%')
-    PlotConfidenceIntervals(ages, inters, slopes, percent=50,
-                            alpha=0.5, label='50% CI')
+    PlotConfidenceIntervals(
+        ages, inters, slopes, percent=50, alpha=0.5, label='50% CI')
     thinkplot.Text(42, 7.59, '50%')
 
-    thinkplot.Save(root='linear3',
-                   xlabel='age (years)',
-                   ylabel='birth weight (lbs)',
-                   legend=False)
+    thinkplot.Save(
+        root='linear3',
+        xlabel='age (years)',
+        ylabel='birth weight (lbs)',
+        legend=False)
 
     # plot the confidence intervals
     thinkplot.PrePlot(2)
     thinkplot.Scatter(ages, weights, color='gray', alpha=0.1)
     PlotConfidenceIntervals(ages, inters, slopes, res=res, alpha=0.2)
     PlotConfidenceIntervals(ages, inters, slopes)
-    thinkplot.Save(root='linear5',
-                   xlabel='age (years)',
-                   ylabel='birth weight (lbs)',
-                   title='90% CI',
-                   axis=[10, 45, 0, 15],
-                   legend=False)
+    thinkplot.Save(
+        root='linear5',
+        xlabel='age (years)',
+        ylabel='birth weight (lbs)',
+        title='90% CI',
+        axis=[10, 45, 0, 15],
+        legend=False)
 
     # plot the sampling distribution of slope under null hypothesis
     # and alternate hypothesis
@@ -132,11 +138,12 @@ def PlotSamplingDistributions(live):
     thinkplot.Plot([0, 0], [0, 1], color='0.8')
     ht.PlotCdf(label='null hypothesis')
     thinkplot.Cdf(sampling_cdf, label='sampling distribution')
-    thinkplot.Save(root='linear4',
-                   xlabel='slope (lbs / year)',
-                   ylabel='CDF',
-                   xlim=[-0.03, 0.03],
-                   loc='upper left')
+    thinkplot.Save(
+        root='linear4',
+        xlabel='slope (lbs / year)',
+        ylabel='CDF',
+        xlim=[-0.03, 0.03],
+        loc='upper left')
 
 
 def PlotFit(live):
@@ -152,11 +159,12 @@ def PlotFit(live):
     thinkplot.Scatter(ages, weights, color='gray', alpha=0.1)
     thinkplot.Plot(fit_xs, fit_ys, color='white', linewidth=3)
     thinkplot.Plot(fit_xs, fit_ys, color='blue', linewidth=2)
-    thinkplot.Save(root='linear1',
-                   xlabel='age (years)',
-                   ylabel='birth weight (lbs)',
-                   axis=[10, 45, 0, 15],
-                   legend=False)
+    thinkplot.Save(
+        root='linear1',
+        xlabel='age (years)',
+        ylabel='birth weight (lbs)',
+        axis=[10, 45, 0, 15],
+        legend=False)
 
 
 def PlotResiduals(live):
@@ -182,10 +190,11 @@ def PlotResiduals(live):
         label = '%dth' % percent
         thinkplot.Plot(ages, weights, label=label)
 
-    thinkplot.Save(root='linear2',
-                   xlabel='age (years)',
-                   ylabel='residual (lbs)',
-                   xlim=[10, 45])
+    thinkplot.Save(
+        root='linear2',
+        xlabel='age (years)',
+        ylabel='residual (lbs)',
+        xlim=[10, 45])
 
 
 class SlopeTest(thinkstats2.HypothesisTest):
@@ -242,24 +251,26 @@ def EstimateBirthWeight(live, iters=1001):
     mean = live.totalwgt_lb.mean()
     print('mean', mean)
 
-    estimates = [thinkstats2.ResampleRows(live).totalwgt_lb.mean()
-                 for _ in range(iters)]
+    estimates = [
+        thinkstats2.ResampleRows(live).totalwgt_lb.mean() for _ in range(iters)
+    ]
     Summarize(estimates)
 
-    estimates = [ResampleRowsWeighted(live).totalwgt_lb.mean()
-                 for _ in range(iters)]
+    estimates = [
+        ResampleRowsWeighted(live).totalwgt_lb.mean() for _ in range(iters)
+    ]
     Summarize(estimates)
-    
+
 
 def main():
     thinkstats2.RandomSeed(17)
-    
+
     live, _, _ = first.MakeFrames()
     EstimateBirthWeight(live)
 
     live = live.dropna(subset=['agepreg', 'totalwgt_lb'])
     PlotSamplingDistributions(live)
-    
+
     PlotFit(live)
     PlotResiduals(live)
 

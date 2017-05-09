@@ -13,8 +13,6 @@ import scatter
 import thinkstats2
 
 import numpy as np
-
-
 """This file contains a solution to exercises in Think Stats:
 
 As sample size increases, the power of a hypothesis test increases,
@@ -92,9 +90,10 @@ different models can yield very different results.
 
 """
 
+
 class DiffMeansResample(hypothesis.DiffMeansPermute):
     """Tests a difference in means using resampling."""
-    
+
     def RunModel(self):
         """Run the model of the null hypothesis.
 
@@ -103,7 +102,7 @@ class DiffMeansResample(hypothesis.DiffMeansPermute):
         group1 = np.random.choice(self.pool, self.n, replace=True)
         group2 = np.random.choice(self.pool, self.m, replace=True)
         return group1, group2
-  
+
 
 def RunResampleTest(firsts, others):
     """Tests differences in means by resampling.

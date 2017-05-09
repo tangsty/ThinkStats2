@@ -6,7 +6,6 @@ License: GNU GPLv3 http://www.gnu.org/licenses/gpl.html
 """
 
 from __future__ import print_function, division
-
 """This file contains class definitions for:
 
 Hist: represents a histogram (map from values to integer frequencies).
@@ -20,7 +19,6 @@ Cdf: represents a discrete cumulative distribution function
 Pdf: represents a continuous probability density function
 
 """
-
 import bisect
 import copy
 import logging
@@ -45,6 +43,7 @@ from io import open
 
 ROOT2 = math.sqrt(2)
 
+
 def RandomSeed(x):
     """Initialize the random and np.random generators.
 
@@ -52,7 +51,7 @@ def RandomSeed(x):
     """
     random.seed(x)
     np.random.seed(x)
-    
+
 
 def Odds(p):
     """Computes odds for a given probability.
@@ -370,6 +369,7 @@ class Hist(_DictWrapper):
 
     Values can be any hashable type; frequencies are integer counters.
     """
+
     def Freq(self, x):
         """Gets the frequency associated with the value x.
 
@@ -515,8 +515,8 @@ class Pmf(_DictWrapper):
         total = self.Total()
         if total == 0.0:
             raise ValueError('Normalize: total probability is zero.')
-            #logging.warning('Normalize: total probability is zero.')
-            #return total
+            # logging.warning('Normalize: total probability is zero.')
+            # return total
 
         factor = fraction / total
         for x in self.d:
@@ -567,7 +567,7 @@ class Pmf(_DictWrapper):
 
         var = 0.0
         for x, p in self.d.items():
-            var += p * (x - mu) ** 2
+            var += p * (x - mu)**2
         return var
 
     def Std(self, mu=None):
@@ -712,7 +712,7 @@ class Pmf(_DictWrapper):
         try:
             return self.DivPmf(other)
         except AttributeError:
-            return self.MulConstant(1/other)
+            return self.MulConstant(1 / other)
 
     __truediv__ = __div__
 
@@ -941,6 +941,7 @@ class Cdf(object):
         ps: sequence of probabilities
         label: string used as a graph label.
     """
+
     def __init__(self, obj=None, ps=None, label=None):
         """Initializes.
         
@@ -1045,7 +1046,7 @@ class Cdf(object):
         a = self.ps
         b = np.roll(a, 1)
         b[0] = 0
-        return zip(self.xs, a-b)
+        return zip(self.xs, a - b)
 
     def Shift(self, term):
         """Adds a term to the xs.
@@ -1079,7 +1080,7 @@ class Cdf(object):
         if x < self.xs[0]:
             return 0.0
         index = bisect.bisect(self.xs, x)
-        p = self.ps[index-1]
+        p = self.ps[index - 1]
         return p
 
     def Probs(self, xs):
@@ -1091,7 +1092,7 @@ class Cdf(object):
         """
         xs = np.asarray(xs)
         index = np.searchsorted(self.xs, xs, side='right')
-        ps = self.ps[index-1]
+        ps = self.ps[index - 1]
         ps[xs < self.xs[0]] = 0.0
         return ps
 
@@ -1213,6 +1214,7 @@ class Cdf(object):
         Returns:
             tuple of (xs, ps)
         """
+
         def interleave(a, b):
             c = np.empty(a.shape[0] + b.shape[0])
             c[::2] = a
@@ -1518,7 +1520,7 @@ class Pdf(object):
             xs = options.pop('xs', None)
             if xs is None:
                 xs = self.GetLinspace()
-            
+
         ds = self.Density(xs)
         return xs, ds
 
@@ -1550,7 +1552,7 @@ class NormalPdf(Pdf):
 
         Returns: numpy array
         """
-        low, high = self.mu-3*self.sigma, self.mu+3*self.sigma
+        low, high = self.mu - 3 * self.sigma, self.mu + 3 * self.sigma
         return np.linspace(low, high, 101)
 
     def Density(self, xs):
@@ -1583,7 +1585,7 @@ class ExponentialPdf(Pdf):
 
         Returns: numpy array
         """
-        low, high = 0, 5.0/self.lam
+        low, high = 0, 5.0 / self.lam
         return np.linspace(low, high, 101)
 
     def Density(self, xs):
@@ -1593,7 +1595,7 @@ class ExponentialPdf(Pdf):
 
         returns: float or NumPy array of probability density
         """
-        return stats.expon.pdf(xs, scale=1.0/self.lam)
+        return stats.expon.pdf(xs, scale=1.0 / self.lam)
 
 
 class EstimatedPdf(Pdf):
@@ -1772,7 +1774,7 @@ def EvalBinomialPmf(k, n, p):
     Returns the probabily of k successes in n trials with probability p.
     """
     return stats.binom.pmf(k, n, p)
-    
+
 
 def MakeBinomialPmf(n, p):
     """Evaluates the binomial PMF.
@@ -1780,9 +1782,10 @@ def MakeBinomialPmf(n, p):
     Returns the distribution of successes in n trials with probability p.
     """
     pmf = Pmf()
-    for k in range(n+1):
+    for k in range(n + 1):
         pmf[k] = stats.binom.pmf(k, n, p)
     return pmf
+
 
 def EvalHypergeomPmf(k, N, K, n):
     """Evaluates the hypergeometric PMF.
@@ -1791,7 +1794,7 @@ def EvalHypergeomPmf(k, N, K, n):
     N with K successes in it.
     """
     return stats.hypergeom.pmf(k, N, K, n)
-    
+
 
 def EvalPoissonPmf(k, lam):
     """Computes the Poisson PMF.
@@ -1804,7 +1807,7 @@ def EvalPoissonPmf(k, lam):
     # don't use the scipy function (yet).  for lam=0 it returns NaN;
     # should be 0.0
     # return stats.poisson.pmf(k, lam)
-    return lam ** k * math.exp(-lam) / special.gamma(k+1)
+    return lam**k * math.exp(-lam) / special.gamma(k + 1)
 
 
 def MakePoissonPmf(lam, high, step=1):
@@ -1929,7 +1932,7 @@ def RenderExpoCdf(lam, low, high, n=101):
     """
     xs = np.linspace(low, high, n)
     ps = 1 - np.exp(-lam * xs)
-    #ps = stats.expon.cdf(xs, scale=1.0/lam)
+    # ps = stats.expon.cdf(xs, scale=1.0/lam)
     return xs, ps
 
 
@@ -1963,8 +1966,8 @@ def RenderParetoCdf(xmin, alpha, low, high, n=50):
     if low < xmin:
         low = xmin
     xs = np.linspace(low, high, n)
-    ps = 1 - (xs / xmin) ** -alpha
-    #ps = stats.pareto.cdf(xs, scale=xmin, b=alpha)
+    ps = 1 - (xs / xmin)**-alpha
+    # ps = stats.pareto.cdf(xs, scale=xmin, b=alpha)
     return xs, ps
 
 
@@ -1973,6 +1976,7 @@ class Beta(object):
 
     See http://en.wikipedia.org/wiki/Beta_distribution
     """
+
     def __init__(self, alpha=1, beta=1, label=None):
         """Initializes a Beta distribution."""
         self.alpha = alpha
@@ -2006,7 +2010,7 @@ class Beta(object):
 
     def EvalPdf(self, x):
         """Evaluates the PDF at x."""
-        return x ** (self.alpha - 1) * (1 - x) ** (self.beta - 1)
+        return x**(self.alpha - 1) * (1 - x)**(self.beta - 1)
 
     def MakePmf(self, steps=101, label=None):
         """Returns a Pmf of this distribution.
@@ -2102,7 +2106,7 @@ class Dirichlet(object):
 
         x = data
         p = self.Random()
-        q = p[:m] ** x
+        q = p[:m]**x
         return q.prod()
 
     def LogLikelihood(self, data):
@@ -2182,7 +2186,7 @@ def NormalProbability(ys, jitter=0.0):
     n = len(ys)
     xs = np.random.normal(0, 1, n)
     xs.sort()
-    
+
     if jitter:
         ys = Jitter(ys, jitter)
     else:
@@ -2221,7 +2225,7 @@ def NormalProbabilityPlot(sample, fit_color='0.8', **options):
     xs, ys = NormalProbability(sample)
     thinkplot.Plot(xs, ys, **options)
 
- 
+
 def Mean(xs):
     """Computes mean.
 
@@ -2365,7 +2369,7 @@ def Cov(xs, ys, meanx=None, meany=None):
     if meany is None:
         meany = np.mean(ys)
 
-    cov = np.dot(xs-meanx, ys-meany) / len(xs)
+    cov = np.dot(xs - meanx, ys - meany) / len(xs)
     return cov
 
 
@@ -2430,7 +2434,7 @@ def MapToRanks(t):
     """
     # pair up each value with its index
     pairs = enumerate(t)
-    
+
     # sort by value
     sorted_pairs = sorted(pairs, key=itemgetter(1))
 
@@ -2441,7 +2445,7 @@ def MapToRanks(t):
     resorted = sorted(ranked, key=lambda trip: trip[1][0])
 
     # extract the ranks
-    ranks = [trip[0]+1 for trip in resorted]
+    ranks = [trip[0] + 1 for trip in resorted]
     return ranks
 
 
@@ -2625,10 +2629,8 @@ class FixedWidthVariables(object):
 
         returns: DataFrame
         """
-        df = pandas.read_fwf(filename,
-                             colspecs=self.colspecs, 
-                             names=self.names,
-                             **options)
+        df = pandas.read_fwf(
+            filename, colspecs=self.colspecs, names=self.names, **options)
         return df
 
 
@@ -2644,7 +2646,7 @@ def ReadStataDct(dct_file, **options):
 
     var_info = []
     for line in open(dct_file, **options):
-        match = re.search( r'_column\(([^)]*)\)', line)
+        match = re.search(r'_column\(([^)]*)\)', line)
         if match:
             start = int(match.group(1))
             t = line.split()
@@ -2656,13 +2658,13 @@ def ReadStataDct(dct_file, **options):
                 vtype = type_map[vtype]
             long_desc = ' '.join(t[4:]).strip('"')
             var_info.append((start, vtype, name, fstring, long_desc))
-            
+
     columns = ['start', 'type', 'name', 'fstring', 'desc']
     variables = pandas.DataFrame(var_info, columns=columns)
 
     # fill in the end column by shifting the start column
     variables['end'] = variables.start.shift(-1)
-    variables.loc[len(variables)-1, 'end'] = 0
+    variables.loc[len(variables) - 1, 'end'] = 0
 
     dct = FixedWidthVariables(variables, index_base=1)
     return dct
@@ -2729,7 +2731,7 @@ def PercentileRow(array, p):
     """
     rows, cols = array.shape
     index = int(rows * p / 100)
-    return array[index,]
+    return array[index, ]
 
 
 def PercentileRows(ys_seq, percents):
@@ -2749,7 +2751,7 @@ def PercentileRows(ys_seq, percents):
     array = np.zeros((nrows, ncols))
 
     for i, ys in enumerate(ys_seq):
-        array[i,] = ys
+        array[i, ] = ys
 
     array = np.sort(array, axis=0)
 
@@ -2787,8 +2789,9 @@ class HypothesisTest(object):
 
         returns: float p-value
         """
-        self.test_stats = [self.TestStatistic(self.RunModel()) 
-                           for _ in range(iters)]
+        self.test_stats = [
+            self.TestStatistic(self.RunModel()) for _ in range(iters)
+        ]
         self.test_cdf = Cdf(self.test_stats)
 
         count = sum(1 for x in self.test_stats if x >= self.actual)
@@ -2802,6 +2805,7 @@ class HypothesisTest(object):
     def PlotCdf(self, label=None):
         """Draws a Cdf with vertical lines at the observed test stat.
         """
+
         def VertLine(x):
             """Draws a vertical line at x."""
             thinkplot.Plot([x, x], [0, 1], color='0.8')
@@ -2831,7 +2835,7 @@ class HypothesisTest(object):
 
 def main():
     pass
-    
+
 
 if __name__ == '__main__':
     main()

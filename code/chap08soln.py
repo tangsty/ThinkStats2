@@ -5,7 +5,7 @@ Copyright 2014 Allen B. Downey
 License: GNU GPLv3 http://www.gnu.org/licenses/gpl.html
 """
 
-from __future__ import print_function
+from __future__ import print_function, division
 
 import thinkstats2
 import thinkplot
@@ -16,6 +16,8 @@ import numpy as np
 
 from scipy import stats
 from estimation import RMSE, MeanError
+
+
 """This file contains a solution to exercises in Think Stats:
 
 Exercise 8.1
@@ -99,7 +101,6 @@ See https://en.wikipedia.org/wiki/Poisson_distribution
 
 """
 
-
 def Estimate1(n=7, m=100000):
     """Mean error for xbar and median as estimators of population mean.
 
@@ -153,14 +154,13 @@ def SimulateSample(lam=2, n=10, m=1000):
     n: sample size
     m: number of iterations
     """
-
     def VertLine(x, y=1):
         thinkplot.Plot([x, x], [0, y], color='0.8', linewidth=3)
 
     estimates = []
     for j in range(m):
-        xs = np.random.exponential(1.0 / lam, n)
-        lamhat = 1.0 / np.mean(xs)
+        xs = np.random.exponential(1/lam, n)
+        lamhat = 1/np.mean(xs)
         estimates.append(lamhat)
 
     stderr = RMSE(estimates, lam)
@@ -174,11 +174,10 @@ def SimulateSample(lam=2, n=10, m=1000):
 
     # plot the CDF
     thinkplot.Cdf(cdf)
-    thinkplot.Save(
-        root='estimation2',
-        xlabel='estimate',
-        ylabel='CDF',
-        title='Sampling distribution')
+    thinkplot.Save(root='estimation2',
+                   xlabel='estimate',
+                   ylabel='CDF',
+                   title='Sampling distribution')
 
     return stderr
 
@@ -212,7 +211,7 @@ def Estimate4(lam=2, m=1000000):
     print('Experiment 4')
     print('rmse L', RMSE(estimates, lam))
     print('mean error L', MeanError(estimates, lam))
-
+    
     pmf = thinkstats2.Pmf(estimates)
 
     thinkplot.Hist(pmf)
